@@ -2,6 +2,7 @@ import "./App.css";
 import Events from "./components/events"; //this is the child of app.js
 
 function App() {
+  console.log("App");
   return (
     <div className="App">
       <h1>Techtonica 2023 events</h1>
