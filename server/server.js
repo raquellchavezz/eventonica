@@ -49,10 +49,11 @@ app.get("/api/events", async (req, res) => {
         eventtime: req.body.eventtime,
       };
       const result = await db.query(
+        //assigning result to the query that will insert the new event we just created
         "INSERT INTO events(title, location, eventtime) VALUES ($1, $2, $3) RETURNING *",
         [newEvent.title, newEvent.location, newEvent.eventtime]
       );
-      let response = result.rows[0];
+      let response = result.rows[0]; //first row in the query (what we just added?)
       console.log(response);
       res.json(response);
     } catch (e) {
