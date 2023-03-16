@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import EventCard from "./eventCard";
 import CardGroup from "react-bootstrap/CardGroup";
 import AddEvent from "./AddEvent";
-import UpdateEvent from "./UpdateEvent"; //this is a child of events.js
+// import UpdateEvent from "./UpdateEvent"; //this is a child of events.js
 //we want to pass the AddEvent component to events.js so we can use the handle change functions thru out all the events
 // similar to get request on event, we want to do post request on event bc if have new data we want
 // that events to update itself and update the new event
@@ -72,42 +72,67 @@ function Events() {
         // ... to copy the existing events array and adding the new event data at the end of the array.
       });
   };
-
   //put request
-  const putRequest = (eventId, updatedEvent) => {
-    //need to use this in the child, so need to pass as props
-    //console.log("From the parent", newEvent);
-    return fetch("http://localhost:8080/api/${eventId}", {
-      //
-      method: "PUT",
-      headers: { "Content-Type": "application/json" }, //when req made from web browser to backend server, req has multiple parts
-      //header has extra info
-      body: JSON.stringify(updatedEvent), //updatedEvent is an object containing the updated data for the event now transformed to JSON format
+  // const putRequest = (eventId, updatedEvent) => {
+  //   //need to use this in the child, so need to pass as props
+  //   //console.log("From the parent", newEvent);
+  //   return fetch(`http://localhost:8080/api/${eventId}`, {
+  //     //
+  //     method: "PUT",
+  //     headers: { "Content-Type": "application/json" }, //when req made from web browser to backend server, req has multiple parts
+  //     //header has extra info
+  //     body: JSON.stringify(updatedEvent), //updatedEvent is an object containing the updated data for the event now transformed to JSON format
+  //   })
+  //     .then((response) => {
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       //receives the JSON data returned by the first .then()
+  //       //data object contains the updated information for the event that was just edited.
+  //       //console.log("From the front", data);
+  //       //so witht this data
+  //       setEvents(
+  //         (
+  //           events //we want to set the events to the current newest state using setEvents function
+  //         ) => events.map((event) => (event.id === data.id ? data : event))
+  //         //we want to map over
+  //       );
+  //     });
+  // };
+
+  // delete req from frontend which we'll send to the backend
+  const deleteEventFunc = (eventId) => {
+    fetch(`http://localhost:8080/api/events/${eventId}`, {
+      method: "DELETE",
     })
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        //receives the JSON data returned by the first .then()
-        //data object contains the updated information for the event that was just edited.
-        //console.log("From the front", data);
-        //so witht this data
-        setEvents(
-          (
-            events //we want to set the events to the current newest state using setEvents function
-          ) => events.map((event) => (event.id === data.id ? data : event))
-          //we want to map over
-        );
+        setEvents((events) => events.filter((event) => event.id !== eventId));
+        //then we are taking that data from the response in the JSON format and using an
+        //anon function to filter thru the events and see if the event.id is the same as the eventId we pass in as the argument
+        //this is done for each item in the array
+      })
+      .catch((error) => {
+        console.log("Error:", error);
       });
   };
 
+  //function would delete from the database and remove the event from this list in map
+  // pass down to event card
+  //have a function in here that will remove a card, remove item from list hint:use filter
+  //remove id num 1 for example, shows what happens when modify list then can call in delete event
+  //
   return (
     <div>
       <CardGroup className="Events">
         {events.map(
+          //iterating thru array of events, making card for each event
           (event) => (
             <EventCard
-              key={event.id}
+              key={event.id} //required
+              id={event.id} //this is where props.id is referencing
               title={event.title}
               location={event.location}
               time={event.eventtime}
@@ -116,8 +141,10 @@ function Events() {
         )}
       </CardGroup>
       <AddEvent postRequest={postRequest} />
+      {/* 
+      <UpdateEvent putRequest={putRequest} /> */}
 
-      <UpdateEvent putRequest={putRequest} />
+      {/* <DeleteEvent deleteRequest={deleteRequest} /> */}
       {/*passing the prop to the AddEvent component so it will have access to the prop postRequest with a value of postRequest*/}
       {/*this allows the component to get the data/functions from its parent component*/}
       {/*, the AddEvent component will have access to the postRequest

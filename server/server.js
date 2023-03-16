@@ -24,13 +24,15 @@ app.get("/", (req, res) => {
 // Backend code using Express.js to handle the HTTP
 // request and return a response
 app.get("/api/events", async (req, res) => {
+  //line 26 macthes line 26 in events. js with the get fetch
   //getting all the events in our current db
   //real connection with the DB eventonica
   try {
-    //rows will be renamed to events so we are getting all the events from the db?
+    //rows will be renamed to events //so we are getting all the events from the db?
     const { rows: events } = await db.query("SELECT * FROM events"); //uses query to select event
     res.send(events); //we are reassigning source: https://medium.com/@nathanaeldemacon/all-you-need-to-know-about-destructuring-in-javascript-a3af9602a7d7
     //https://www.youtube.com/watch?v=-vR3a11Wzt0
+    //db query is how the backend communicates with the database
   } catch (error) {
     console.log(error);
     return res.status(400).json({ error });
@@ -41,6 +43,9 @@ app.get("/api/events", async (req, res) => {
 
 //create a event (add a resource --> POST)
 app.post("/api/events", async (req, res) => {
+  //fetch here too also a http requeust
+
+  //api allows u to share data its a tool
   //TO - DO - At the end => save this event to the db
   //INSERT INTO events (title, location, eventtime) VALUES ('Women in Tech Techtonica Panel', 'Overland Park Convention Center', '2023-04-21')
   try {
@@ -89,11 +94,10 @@ app.put("/api/events/${eventId}"),
     }
   };
 
-//delete a event
-app.delete("/api/events/:eventID", cors(), async (req, res) => {
-  let eventIdToDelete = req.params.id; // :bookID is like a varaible/placeholder for what is being requested
-  console.log("eventIdToDelete", eventIdToDelete); //2 is the requested book which is being placed in URL in spot of book id but it doesn't exist which is why it is not found 404 error
-  //Is the response
+//delete a event, this is the logic
+app.delete("/api/events/:id", cors(), async (req, res) => {
+  let eventIdToDelete = req.params.id; // :id like a varaible/placeholder for what is being requested
+  console.log("eventIdToDelete", eventIdToDelete);
 
   for (let i = 0; i < events.length; i++) {
     // will use for loop to iterate through the books array
@@ -101,7 +105,7 @@ app.delete("/api/events/:eventID", cors(), async (req, res) => {
     // we want to check to see if the deletedBook request matches an isbn in books
     if (eventIdToDelete === events[i].id) {
       let deletedEvent = events[i].title;
-      console.log(events.splice(i, 1)); // so here we are deleting the isbn that matches at postion i and just deleting that 1 element
+      events.splice(i, 1); // so here we are deleting the isbn that matches at postion i and just deleting that 1 element
 
       return res.json("You deleted: " + deletedEvent); //
     }
