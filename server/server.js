@@ -21,7 +21,8 @@ app.get("/", (req, res) => {
   //when server has a req sent to it it'll look for what url is being used
   res.json("Hello Techtonica Server for an app with Events"); //--> localhost:8080
 });
-
+// Backend code using Express.js to handle the HTTP
+// request and return a response
 app.get("/api/events", async (req, res) => {
   //getting all the events in our current db
   //real connection with the DB eventonica
@@ -65,48 +66,48 @@ app.post("/api/events", async (req, res) => {
 
 // update a event (PUT) - not working
 
-// app.put("/api/events/:id"),
-//   async (req, res) => {
-//     try {
-//       const { id } = req.params; //we want to get the id of the requested parameters which will be the event id
-//       const updateEvent = {
-//         title: req.body.title,
-//         location: req.body.location,
-//         eventtime: req.body.eventtime,
-//       };
-//       const result = await db.query(
-//         //assigning result to the query that will insert the new event we just created
-//         "UPDATE events(title, location, eventtime) VALUES ($1, $2, $3) WHERE id = $4",
-//         [updateEvent.title, updateEvent.location, updateEvent.eventtime]
-//       );
-//       let response = result.rows[0]; //first row in the query (what we just added?)
-//       console.log(response);
-//       res.json(response);
-//     } catch (e) {
-//       console.log(error);
-//       return res.status(400).json({ error });
-//     }
-//   };
+app.put("/api/events/${eventId}"),
+  async (req, res) => {
+    try {
+      const { id } = req.params; //we want to get the id of the requested parameters which will be the event id
+      const updateEvent = {
+        title: req.body.title,
+        location: req.body.location,
+        eventtime: req.body.eventtime,
+      };
+      const result = await db.query(
+        //assigning result to the query that will insert the new event we just created
+        "UPDATE events(title, location, eventtime) VALUES ($1, $2, $3) WHERE id = $4",
+        [updateEvent.title, updateEvent.location, updateEvent.eventtime]
+      );
+      let response = result.rows[0]; //first row in the query (what we just added?)
+      console.log(response);
+      res.json(response);
+    } catch (e) {
+      console.log(error);
+      return res.status(400).json({ error });
+    }
+  };
 
 //delete a event
-// app.delete("/api/events/:eventID", cors(), async (req, res) => {
-//   let eventIdToDelete = req.params.eventID; // :bookID is like a varaible/placeholder for what is being requested
-//   console.log("eventIdToDelete", eventIdToDelete); //2 is the requested book which is being placed in URL in spot of book id but it doesn't exist which is why it is not found 404 error
-//   //Is the response
+app.delete("/api/events/:eventID", cors(), async (req, res) => {
+  let eventIdToDelete = req.params.id; // :bookID is like a varaible/placeholder for what is being requested
+  console.log("eventIdToDelete", eventIdToDelete); //2 is the requested book which is being placed in URL in spot of book id but it doesn't exist which is why it is not found 404 error
+  //Is the response
 
-//   for (let i = 0; i < events.length; i++) {
-//     // will use for loop to iterate through the books array
-//     //for every book n the array of object called books --> books.js
-//     // we want to check to see if the deletedBook request matches an isbn in books
-//     if (eventIdToDelete === events[i].id) {
-//       let deletedEventTitle = events[i].title;
-//       console.log(events.splice(i, 1)); // so here we are deleting the isbn that matches at postion i and just deleting that 1 element
+  for (let i = 0; i < events.length; i++) {
+    // will use for loop to iterate through the books array
+    //for every book n the array of object called books --> books.js
+    // we want to check to see if the deletedBook request matches an isbn in books
+    if (eventIdToDelete === events[i].id) {
+      let deletedEvent = events[i].title;
+      console.log(events.splice(i, 1)); // so here we are deleting the isbn that matches at postion i and just deleting that 1 element
 
-//       return res.json("You deleted: " + deletedEventTitle); //
-//     }
-//   } //response for match below:
-//   res.sendStatus(404);
-// });
+      return res.json("You deleted: " + deletedEvent); //
+    }
+  } //response for match below:
+  res.sendStatus(404);
+});
 
 //hardcode the events response for testing reasons. This call has one more event that the real DB
 // const events = [

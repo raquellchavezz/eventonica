@@ -46,42 +46,30 @@ function Events() {
   }, []); //whenever array changes will run useEffect, controls when component rerenders
   //empty array =  indicates that the effect should only be executed once, when the component is mounted/loads.
 
-  //post request on frontend
-
-  //function postRequest(newEvent){
-  //   return fetch("http://localhost:8080/api/events", {
-  //     //
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" }, //when req made from web browser to backend server, req has multiple parts
-  //     //header has extra info
-  //     body: JSON.stringify(newEvent),
-  //   })
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       //console.log("From the front", data);
-  //       setEvents((events) => [...events, data]);
-  //     });
-  // };
-
-  //}
   const postRequest = (newEvent) => {
+    //we want to send a post req to the back end to add event
+    //with the newEvent data in the request body
+    // goal: updates the state of the component with the newly created event data returned by the server.
     //need to use this in the child, so need to pass as props
     //console.log("From the parent", newEvent);
+    //newEvent in param = data to be sent in the request body.
     return fetch("http://localhost:8080/api/events", {
       //
       method: "POST",
       headers: { "Content-Type": "application/json" }, //when req made from web browser to backend server, req has multiple parts
       //header has extra info
-      body: JSON.stringify(newEvent),
+      body: JSON.stringify(newEvent), // request body as a JSON string representation of the newEvent object.
     })
       .then((response) => {
-        return response.json();
+        // receives the response object returned by the server(backend).
+        return response.json(); //change format to JSON so we can use it
       })
       .then((data) => {
+        // receives the JSON data returned by the first .then()
         //console.log("From the front", data);
-        setEvents((events) => [...events, data]);
+        setEvents((events) => [...events, data]); //updates the state of the component
+        //add the new event data to the existing list of events in the state
+        // ... to copy the existing events array and adding the new event data at the end of the array.
       });
   };
 
@@ -100,9 +88,15 @@ function Events() {
         return response.json();
       })
       .then((data) => {
+        //receives the JSON data returned by the first .then()
+        //data object contains the updated information for the event that was just edited.
         //console.log("From the front", data);
-        setEvents((events) =>
-          events.map((event) => (event.id === data.id ? data : event))
+        //so witht this data
+        setEvents(
+          (
+            events //we want to set the events to the current newest state using setEvents function
+          ) => events.map((event) => (event.id === data.id ? data : event))
+          //we want to map over
         );
       });
   };

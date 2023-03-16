@@ -1,8 +1,8 @@
 // we can start with add event component to better visualize how data is being passed
-// componenet for creating new event which is a form
+// componenet for creating updated event which is a form
 
 import { useState } from "react"; //need to handle information
-//need this form to send this information to do the post request so we can actually add it on the page
+//need this form to send this information to do the put request so we can actually update it on the page
 //^ dont want this happening here though, we would do it in events.js since this is the place that is already doing a request
 //component passing the data props in here
 const UpdateEvent = (props) => {
@@ -11,14 +11,8 @@ const UpdateEvent = (props) => {
   //we want to have a state so we can add events
   //useState will be an object with the keys already bc we want to pass the keys
   // the value of the keys will be empty though bc at the beginning we dont know what the user wants to add
-  const [updateEvent, setUpdateEvent] = useState({
-    //we use the useState hook to manage state and update UI elements accordingly.
-    //curent state value is initally an object with keys all set to empty strings
-    //state here used in line 49
-    title: "",
-    location: "",
-    eventtime: "", //this value used for line 77
-  });
+  const [events, setEvents] = useState([]);
+  const [updateEvent, setUpdateEvent] = useState([...events]);
   //This is my data
   //{title: 'Women', location: 'Overland'. eventtime: "2023-03-29T07:00:00.000Z"}
   //we need handlechange functions so the browser doesnt reload when user types something new in each time
@@ -30,9 +24,9 @@ const UpdateEvent = (props) => {
     //if we console.log(e.target) --> <input type="text" id="add-event-title" placeholder="The Title of your Event" required="" value="">
     //so to target the area where it says value above, we need to do e.target.value
     //e.target is an event property that refers to the element that triggered the event.
-    console.log("this is the e.target", e.target); // --> <input type="text" id="add-event-title" placeholder="The Title of your Event" required="" value="hello">
-    console.log("this is the updated Title", updateTitle); //-> this is newTitle hello (this is whats in the console when we changed the e.target.value instead of e.target)
-    setUpdateEvent((updateEvent) => ({ ...updateEvent, title: updateTitle })); //set as new information for the event, curly braces bc state is an object, its how we are able to access/add info to our state
+    // console.log("this is the e.target", e.target); // --> <input type="text" id="add-event-title" placeholder="The Title of your Event" required="" value="hello">
+    // console.log("this is the updated Title", updateTitle); //-> this is newTitle hello (this is whats in the console when we changed the e.target.value instead of e.target)
+    setUpdateEvent((updateEvent) => ({ ...events, title: updateTitle })); //set as new information for the event, curly braces bc state is an object, its how we are able to access/add info to our state
     //used the spread operator to copy all the events, and just change the title of the event we want to change
     //adding directly into the obj, we just want to change the title
     //spreaad operator bc we dont want to lose all the information when changing only the title, we want to keep location, daate, etc
@@ -46,8 +40,8 @@ const UpdateEvent = (props) => {
     // handle changes to a location input.
     e.preventDefault();
     let updateLocation = e.target.value; //targets the update of location which user inputs
-    setUpdateEvent((UpdateEvent) => ({
-      ...updateEvent,
+    setUpdateEvent((updateEvent) => ({
+      ...events,
       location: updateLocation,
     }));
     //console.log(event.location);
@@ -56,7 +50,7 @@ const UpdateEvent = (props) => {
     e.preventDefault();
     let updateDate = e.target.value;
     setUpdateEvent((updateEvent) => ({
-      ...updateEvent,
+      ...events,
       eventtime: updateDate,
     }));
     //console.log(event.eventtime);
@@ -70,7 +64,7 @@ const UpdateEvent = (props) => {
     //when setting event to event, stored each piece in event and at once updating overall state
     //SetEvent sets final updated event
     console.log("this is from handleSubmit", updateEvent);
-    props.putRequest(UpdateEvent); //passing the postRequest here
+    props.putRequest(updateEvent); //passing the postRequest here
     //data.postRequest(event)
   };
 
