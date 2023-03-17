@@ -57,10 +57,12 @@ app.post("/api/events", async (req, res) => {
     };
     const result = await db.query(
       //assigning result to the query that will insert the new event we just created
+      // line below inserts a new event into the "events" table w all the stuff we defined in lines 54-56
       "INSERT INTO events(title, location, eventtime) VALUES ($1, $2, $3) RETURNING *",
+      //RETURNING * clause at the end of the query returns all columns of the newly inserted row.
       [newEvent.title, newEvent.location, newEvent.eventtime]
     );
-    let response = result.rows[0]; //first row in the query (what we just added?)
+    let response = result.rows[0]; //first row returned in the query executed in try block, value of the newly inserted singular row
     console.log(response);
     res.json(response);
   } catch (e) {

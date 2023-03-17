@@ -102,19 +102,28 @@ function Events() {
 
   // delete req from frontend which we'll send to the backend
   //sending req to endppoint created
+
+  //we've created a function called deleteEvent which will take in an eventId
+  //function to make an HTTP DELETE request to a server API endpoint (backend)
+  //the url in line 110
+
   const deleteEvent = (eventId) => {
     fetch(`http://localhost:8080/api/events/${eventId}`, {
+      //fetch function to make an HTTP DELETE request to a server API endpoint.
       method: "DELETE",
     })
       .then((response) => {
         if (!response.ok) {
+          //if response is not 200-299
           throw new Error("HTTP error, status = " + response.status);
         }
         const contentLength = response.headers.get("content-length");
         if (contentLength && contentLength !== "0") {
+          //check the length of the content which is the header info to see if theres any info being given back here from the server which gives us baack a response with the response header info
+          //^  check whether the response body is empty or not.
           return response.json();
         } else {
-          return null;
+          return null; //if response body is empty
         }
       })
       .then((data) => {

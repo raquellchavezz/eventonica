@@ -11,6 +11,7 @@ const AddEvent = (props) => {
   //useState will be an object with the keys already bc we want to pass the keys
   // the value of the keys will be empty though bc at the beginning we dont know what the user wants to add
   const [event, setEvent] = useState({
+    //is this being added here so we have access to the state?
     //we use the useState hook to manage state and update UI elements accordingly.
     //curent state value is initally an object with keys all set to empty strings
     //state here used in line 49
@@ -59,7 +60,7 @@ const AddEvent = (props) => {
     //e = event of the form
     //handles the submit so not grabbing every single character the user types
     e.preventDefault(); //stop browser reloading bc havent connected to server yet
-    setEvent(event); //? --> here is where you would set the whole event
+    setEvent(event); //?there is where you would set the whole event
     //when setting event to event, stored each piece in event and at once updating overall state
     //SetEvent sets final updated event
     console.log("this is from handleSubmit", event);
