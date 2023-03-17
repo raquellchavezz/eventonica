@@ -59,11 +59,13 @@ const AddEvent = (props) => {
     //e = event of the form
     //handles the submit so not grabbing every single character the user types
     e.preventDefault(); //stop browser reloading bc havent connected to server yet
-    setEvent(event); //here is where you would set the whole event
+    setEvent(event); //? --> here is where you would set the whole event
     //when setting event to event, stored each piece in event and at once updating overall state
     //SetEvent sets final updated event
     console.log("this is from handleSubmit", event);
     props.postRequest(event); //passing the postRequest here
+    //post req func sending this event data to backend so event can be created
+
     //data.postRequest(event)
   };
 

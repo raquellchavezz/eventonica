@@ -71,19 +71,41 @@ app.post("/api/events", async (req, res) => {
 
 // update a event (PUT) - not working
 
-app.put("/api/events/${eventId}"),
+// app.put("/api/events/${eventId}"),
+//   async (req, res) => {
+//     try {
+//       const { id } = req.params; //we want to get the id of the requested parameters which will be the event id
+//       const updateEvent = {
+//         title: req.body.title,
+//         location: req.body.location,
+//         eventtime: req.body.eventtime,
+//       };
+//       const result = await db.query(
+//         //assigning result to the query that will insert the new event we just created
+//         "UPDATE events(title, location, eventtime) VALUES ($1, $2, $3) WHERE id = $4",
+//         [updateEvent.title, updateEvent.location, updateEvent.eventtime]
+//       );
+//       let response = result.rows[0]; //first row in the query (what we just added?)
+//       console.log(response);
+//       res.json(response);
+//     } catch (e) {
+//       console.log(error);
+//       return res.status(400).json({ error });
+//     }
+//   };
+
+//delete a event, this is the logic
+app.delete(
+  "/api/events/:eventId",
+
   async (req, res) => {
     try {
-      const { id } = req.params; //we want to get the id of the requested parameters which will be the event id
-      const updateEvent = {
-        title: req.body.title,
-        location: req.body.location,
-        eventtime: req.body.eventtime,
-      };
+      const { eventId } = req.params; //we want to get the id of the requested parameters which will be the event id
+      //^  using object destructuring to extract the value of id from the req.params object.
       const result = await db.query(
         //assigning result to the query that will insert the new event we just created
-        "UPDATE events(title, location, eventtime) VALUES ($1, $2, $3) WHERE id = $4",
-        [updateEvent.title, updateEvent.location, updateEvent.eventtime]
+        "DELETE FROM events WHERE id = $1;", //where id = specific num instead the placeholder
+        [eventId] //the value of the placeholder, would be the num
       );
       let response = result.rows[0]; //first row in the query (what we just added?)
       console.log(response);
@@ -92,27 +114,12 @@ app.put("/api/events/${eventId}"),
       console.log(error);
       return res.status(400).json({ error });
     }
-  };
-
-//delete a event, this is the logic
-app.delete("/api/events/:id", cors(), async (req, res) => {
-  let eventIdToDelete = req.params.id; // :id like a varaible/placeholder for what is being requested
-  console.log("eventIdToDelete", eventIdToDelete);
-
-  for (let i = 0; i < events.length; i++) {
-    // will use for loop to iterate through the books array
-    //for every book n the array of object called books --> books.js
-    // we want to check to see if the deletedBook request matches an isbn in books
-    if (eventIdToDelete === events[i].id) {
-      let deletedEvent = events[i].title;
-      events.splice(i, 1); // so here we are deleting the isbn that matches at postion i and just deleting that 1 element
-
-      return res.json("You deleted: " + deletedEvent); //
-    }
-  } //response for match below:
-  res.sendStatus(404);
-});
-
+  }
+);
+//add strings that will help see in front of console.log to see where undef is coming from
+//search for id in the table to see if got delted
+//see if query being executed properly on backedn see how to reload frontend after event isnt in the table on the frontend
+//
 //hardcode the events response for testing reasons. This call has one more event that the real DB
 // const events = [
 

@@ -101,12 +101,21 @@ function Events() {
   // };
 
   // delete req from frontend which we'll send to the backend
-  const deleteEventFunc = (eventId) => {
+  //sending req to endppoint created
+  const deleteEvent = (eventId) => {
     fetch(`http://localhost:8080/api/events/${eventId}`, {
       method: "DELETE",
     })
       .then((response) => {
-        return response.json();
+        if (!response.ok) {
+          throw new Error("HTTP error, status = " + response.status);
+        }
+        const contentLength = response.headers.get("content-length");
+        if (contentLength && contentLength !== "0") {
+          return response.json();
+        } else {
+          return null;
+        }
       })
       .then((data) => {
         setEvents((events) => events.filter((event) => event.id !== eventId));
@@ -129,22 +138,26 @@ function Events() {
       <CardGroup className="Events">
         {events.map(
           //iterating thru array of events, making card for each event
-          (event) => (
+          (
+            event //array called event
+          ) => (
             <EventCard
+              //giving event card this data thru props able to use in eventCard.js
               key={event.id} //required
               id={event.id} //this is where props.id is referencing
               title={event.title}
               location={event.location}
               time={event.eventtime}
+              deleteEvent={deleteEvent} //passing the delete event func here
             />
           ) //passing props here
         )}
       </CardGroup>
       <AddEvent postRequest={postRequest} />
+
       {/* 
       <UpdateEvent putRequest={putRequest} /> */}
 
-      {/* <DeleteEvent deleteRequest={deleteRequest} /> */}
       {/*passing the prop to the AddEvent component so it will have access to the prop postRequest with a value of postRequest*/}
       {/*this allows the component to get the data/functions from its parent component*/}
       {/*, the AddEvent component will have access to the postRequest

@@ -2,15 +2,14 @@
 import { useState } from "react";
 
 const DeleteEvent = (props) => {
-  const [id, setId] = useState(null); //we dont know the id so can be null
-
-  const handleClick = (id) => {
-    console.log("this is from handleSubmit given an id of: ", id);
-    props.DeleteEvent(id);
+  //   const [id, setId] = useState(null); //we dont know the id so can be null
+  const handleClick = (e) => {
+    e.preventDefault();
+    props.deleteEvent(props.id); //passing func thru props
   };
   return (
     <div>
-      <button onClick={handleClick}>Delete Event </button>
+      <button onClick={handleClick}>Delete </button>
     </div>
   );
 };

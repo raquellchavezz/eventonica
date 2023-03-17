@@ -17,7 +17,7 @@ const EventCard = (props) => {
           )}
         </Card.Subtitle>
         <Card.Text>{props.location}</Card.Text>
-        <DeleteEvent id={props.id} deleteEvent={deleteRequest} />
+        <DeleteEvent id={props.id} deleteEvent={props.deleteEvent} />
       </Card.Body>
     </Card>
   );
